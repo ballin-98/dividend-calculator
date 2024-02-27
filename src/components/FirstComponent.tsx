@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import Button from "@mui/material/Button";
 import {
   FormControl,
@@ -22,13 +22,6 @@ const ButtonComponent = () => {
   return (
     <div>
       <h1>Goated component</h1>
-      <Button
-        variant="contained"
-        style={{ backgroundColor: "#ADBC9F" }}
-        onClick={doSomething}
-      >
-        Calculate
-      </Button>
       <FormControl fullWidth>
         <InputLabel id="demo-simple-select-label">
           Dividend Payout Frequency
@@ -63,6 +56,13 @@ const ButtonComponent = () => {
           inputProps={{ min: "0", step: "1" }}
         />
       </div>
+      <Button
+        variant="contained"
+        style={{ backgroundColor: "#ADBC9F" }}
+        onClick={doSomething}
+      >
+        Calculate
+      </Button>
     </div>
   );
 };

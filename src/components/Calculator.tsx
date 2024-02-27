@@ -1,12 +1,7 @@
-import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 
-const ButtonComponent = () => {
-  const doSomething = () => {
-    console.log("what's good");
-  };
-
+const SummaryCard = () => {
   return (
     <Card>
       <CardContent
@@ -30,16 +25,9 @@ const ButtonComponent = () => {
           {/* % Increase */}
           <strong>% Increase:</strong> 5%
         </div>
-        <Button
-          variant="contained"
-          style={{ backgroundColor: "#ADBC9F", marginTop: "16px" }}
-          onClick={doSomething}
-        >
-          Calculate
-        </Button>
       </CardContent>
     </Card>
   );
 };
 
-export default ButtonComponent;
+export default SummaryCard;
