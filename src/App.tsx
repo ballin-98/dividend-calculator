@@ -1,12 +1,10 @@
 import "./App.css";
-import ButtonComponent from "./components/FirstComponent";
-import SummaryCard from "./components/Calculator";
+import Calculator from "./components/Calculator";
 
 function App() {
   return (
     <div className="App">
-      <ButtonComponent />
-      <SummaryCard />
+      <Calculator />
     </div>
   );
 }
