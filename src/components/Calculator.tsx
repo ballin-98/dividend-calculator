@@ -39,9 +39,7 @@ const Calculator = () => {
   };
 
   const handleAdditionalInvestmentFrequency = (event: any) => {
-    console.log("running");
     if (event.target) {
-      console.log("here");
       setAdditionalInvestmentFrequency(event.target.value);
     }
   };
@@ -59,26 +57,56 @@ const Calculator = () => {
   };
 
   const handleDividendFrequency = (event: any) => {
-    console.log("running");
     if (event.target) {
-      console.log("here");
       setDividendFrequency(event.target.value);
     }
   };
 
   const calculateDividend = () => {
-    const investmentReturnDecimal = investmentReturn / 100;
-    const rDivN = investmentReturnDecimal / dividendFrequency;
-    const divNumYears = dividendFrequency * years;
-    const compoundInterest =
-      initialInvestment * Math.pow(1 + rDivN, divNumYears);
-    console.log(compoundInterest);
-    const additionalInterest =
-      additionalInvestment *
-      ((Math.pow(1 + rDivN, dividendFrequency * years) - 1) / rDivN);
-    console.log(additionalInterest);
-    const total = compoundInterest + additionalInterest;
-    console.log("total made: ", total);
+    calculateInvestmentByYear(
+      initialInvestment,
+      years,
+      investmentReturn / 100,
+      dividendFrequency,
+      additionalInvestment,
+      additionalInvestmentFrequency
+    );
+  };
+
+  const calculateInvestmentByYear = (
+    p: number,
+    n: number,
+    investmentReturn: number,
+    dividendFrequency: number,
+    additionalInvestment: any,
+    additionalInvestmentFrequency: number
+  ) => {
+    const additionalInvestmentNum = parseInt(additionalInvestment, 10);
+    const months = n * 12;
+    const dividendPayouts = mapDividendFrequencyToNumMonths(dividendFrequency);
+    let totalInvestment: number = p;
+    const freq = mapDividendFrequencyToNumMonths(additionalInvestmentFrequency);
+    for (let i = 1; i <= months; i++) {
+      if (i % dividendPayouts === 0 || (i === 1 && dividendPayouts === 4)) {
+        totalInvestment =
+          totalInvestment * (1 + investmentReturn / dividendFrequency);
+      }
+      if (i % freq === 0 || (i === 1 && dividendPayouts === 4)) {
+        totalInvestment += additionalInvestmentNum;
+      }
+    }
+    console.log("total: ", totalInvestment);
+  };
+
+  const mapDividendFrequencyToNumMonths = (dividendFrequency: number) => {
+    console.log("dividend frequency: ", dividendFrequency);
+    if (dividendFrequency == 12) {
+      return 1;
+    }
+    if (dividendFrequency == 4) {
+      return 4;
+    }
+    return 12;
   };
 
   return (
