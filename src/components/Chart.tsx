@@ -27,8 +27,6 @@ const LineChart = () => {
     Filler
   );
 
-  const updateChartValues = (arr: number[]) => {};
-
   useEffect(() => {
     // Example: Log the global array when it changes
     console.log("Global Array changed:", globalArray);
@@ -91,16 +89,16 @@ const LineChart = () => {
           above: "rgb(166, 0, 0, 0.1)", // Area will be red above the origin
         },
       },
-      {
-        // label: "Principal",
-        // data: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-        // borderColor: "rgb(1, 1, 132)",
-        // backgroundColor: "rgba(0, 0, 0, 0.5)",
-        // fill: {
-        //   target: "origin",
-        //   above: "rgb(1, 0, 0)", // Area will be red above the origin
-        // },
-      },
+      // {
+      // label: "Principal",
+      // data: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+      // borderColor: "rgb(1, 1, 132)",
+      // backgroundColor: "rgba(0, 0, 0, 0.5)",
+      // fill: {
+      //   target: "origin",
+      //   above: "rgb(1, 0, 0)", // Area will be red above the origin
+      // },
+      // },
     ],
   };
   return <Line options={options} data={data} />;
