@@ -81,21 +81,26 @@ const Calculator = () => {
     additionalInvestment: any,
     additionalInvestmentFrequency: number
   ) => {
+    const totalByYear: number[] = [];
     const additionalInvestmentNum = parseInt(additionalInvestment, 10);
     const months = n * 12;
     const dividendPayouts = mapDividendFrequencyToNumMonths(dividendFrequency);
-    let totalInvestment: number = p;
     const freq = mapDividendFrequencyToNumMonths(additionalInvestmentFrequency);
     for (let i = 1; i <= months; i++) {
       if (i % dividendPayouts === 0 || (i === 1 && dividendPayouts === 4)) {
-        totalInvestment =
-          totalInvestment * (1 + investmentReturn / dividendFrequency);
+        p = p * (1 + investmentReturn / dividendFrequency);
       }
       if (i % freq === 0 || (i === 1 && dividendPayouts === 4)) {
-        totalInvestment += additionalInvestmentNum;
+        p += additionalInvestmentNum;
+      }
+      // add the yearly total to an array
+      if (i % 12 === 0) {
+        totalByYear.push(p);
       }
     }
-    console.log("total: ", totalInvestment);
+    console.log(totalByYear);
+    console.log("total: ", p);
+    return totalByYear;
   };
 
   const mapDividendFrequencyToNumMonths = (dividendFrequency: number) => {
