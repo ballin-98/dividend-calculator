@@ -216,6 +216,7 @@ const Calculator = () => {
         variant="contained"
         style={{ backgroundColor: "#ADBC9F", height: "100px" }}
         onClick={calculateDividend}
+        className="calculate-button"
       >
         Calculate
       </Button>
