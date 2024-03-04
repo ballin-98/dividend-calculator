@@ -15,7 +15,8 @@ import {
   RATE_OF_RETURN,
   DIVIDEND_PAYOUT_FREQUENCY,
 } from "../constants/InputConstants";
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { GlobalArrayContext } from "../pages/CalculatorPage";
 
 const Calculator = () => {
   const [initialInvestment, setInitialInvestment] = useState(1000);
@@ -25,6 +26,8 @@ const Calculator = () => {
   const [years, setYears] = useState(2);
   const [investmentReturn, setInvestmentReturn] = useState(5);
   const [dividendFrequency, setDividendFrequency] = useState(1);
+
+  const { setGlobalArray } = useContext(GlobalArrayContext)!;
 
   const handleInitialInvestment = (event: any) => {
     if (event.target) {
@@ -63,7 +66,7 @@ const Calculator = () => {
   };
 
   const calculateDividend = () => {
-    calculateInvestmentByYear(
+    const numArr = calculateInvestmentByYear(
       initialInvestment,
       years,
       investmentReturn / 100,
@@ -71,6 +74,7 @@ const Calculator = () => {
       additionalInvestment,
       additionalInvestmentFrequency
     );
+    setGlobalArray(numArr);
   };
 
   const calculateInvestmentByYear = (

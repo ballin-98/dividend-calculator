@@ -10,8 +10,12 @@ import {
   Filler,
 } from "chart.js";
 import { Line } from "react-chartjs-2";
+import { useContext, useEffect } from "react";
+import { GlobalArrayContext } from "../pages/CalculatorPage";
 
 const LineChart = () => {
+  const { globalArray } = useContext(GlobalArrayContext)!;
+
   ChartJS.register(
     CategoryScale,
     LinearScale,
@@ -22,6 +26,16 @@ const LineChart = () => {
     Legend,
     Filler
   );
+
+  const updateChartValues = (arr: number[]) => {};
+
+  useEffect(() => {
+    // Example: Log the global array when it changes
+    console.log("Global Array changed:", globalArray);
+    localArray = globalArray;
+  }, [globalArray]);
+
+  let localArray = globalArray;
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const options: any = {
@@ -69,7 +83,7 @@ const LineChart = () => {
     datasets: [
       {
         label: "Investment",
-        data: [5, 10, 15, 20, 10, 12, 15, 16, 16, 20],
+        data: localArray,
         borderColor: "rgb(255, 99, 132)",
         backgroundColor: "rgba(255, 99, 132, 0.5)",
         fill: {
@@ -78,10 +92,10 @@ const LineChart = () => {
         },
       },
       {
-        label: "Principal",
-        data: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-        borderColor: "rgb(1, 1, 132)",
-        backgroundColor: "rgba(0, 0, 0, 0.5)",
+        // label: "Principal",
+        // data: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+        // borderColor: "rgb(1, 1, 132)",
+        // backgroundColor: "rgba(0, 0, 0, 0.5)",
         // fill: {
         //   target: "origin",
         //   above: "rgb(1, 0, 0)", // Area will be red above the origin
