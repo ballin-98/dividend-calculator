@@ -6,6 +6,8 @@ import { ReactNode, createContext, useState } from "react";
 export interface GlobalArrayContextType {
   globalArray: number[];
   setGlobalArray: React.Dispatch<React.SetStateAction<number[]>>;
+  principalArray: number[];
+  setPrincipalArray: React.Dispatch<React.SetStateAction<number[]>>;
 }
 
 export const GlobalArrayContext = createContext<
@@ -18,9 +20,14 @@ export interface GlobalArrayProviderProps {
 
 export const GlobalArrayProvider = ({ children }: GlobalArrayProviderProps) => {
   const [globalArray, setGlobalArray] = useState<number[]>([1, 2, 3, 4, 5]);
+  const [principalArray, setPrincipalArray] = useState<number[]>([
+    1, 2, 3, 4, 5,
+  ]);
 
   return (
-    <GlobalArrayContext.Provider value={{ globalArray, setGlobalArray }}>
+    <GlobalArrayContext.Provider
+      value={{ globalArray, setGlobalArray, principalArray, setPrincipalArray }}
+    >
       {children}
     </GlobalArrayContext.Provider>
   );

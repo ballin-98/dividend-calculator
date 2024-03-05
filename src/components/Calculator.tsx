@@ -27,7 +27,7 @@ const Calculator = () => {
   const [investmentReturn, setInvestmentReturn] = useState(5);
   const [dividendFrequency, setDividendFrequency] = useState(1);
 
-  const { setGlobalArray } = useContext(GlobalArrayContext)!;
+  const { setGlobalArray, setPrincipalArray } = useContext(GlobalArrayContext)!;
 
   const handleInitialInvestment = (event: any) => {
     if (event.target) {
@@ -65,6 +65,56 @@ const Calculator = () => {
     }
   };
 
+  const calculateMonthlyReturn = () => {
+    const totalMonth: number[] = [];
+    let total = initialInvestment;
+    const dividendPayouts = mapDividendFrequencyToNumMonths(dividendFrequency);
+    const freq = mapDividendFrequencyToNumMonths(additionalInvestmentFrequency);
+    for (let i = 1; i <= 12; i++) {
+      if (i % freq === 0 || (i === 1 && dividendPayouts === 4)) {
+        if (i != 1) {
+          total += additionalInvestment;
+        }
+        totalMonth.push(total);
+      }
+    }
+    return totalMonth;
+  };
+
+  const getPrincipalInvestmentValues = () => {
+    let totalByYear: number[] = [];
+    let total = initialInvestment;
+    const months = years * 12;
+    const dividendPayouts = mapDividendFrequencyToNumMonths(dividendFrequency);
+    const freq = mapDividendFrequencyToNumMonths(additionalInvestmentFrequency);
+    if (years == 1) {
+      totalByYear = calculateMonthlyReturn();
+    } else {
+      for (let i = 1; i <= months; i++) {
+        if (i % freq === 0 || (i === 1 && dividendPayouts === 4)) {
+          total += additionalInvestment;
+        }
+        // add the yearly total to an array
+        if (i % 12 === 0) {
+          totalByYear.push(total);
+        }
+      }
+    }
+
+    return totalByYear;
+  };
+
+  const mapDividendFrequencyToNumMonths = (dividendFrequency: number) => {
+    console.log("dividend frequency: ", dividendFrequency);
+    if (dividendFrequency == 12) {
+      return 1;
+    }
+    if (dividendFrequency == 4) {
+      return 4;
+    }
+    return 12;
+  };
+
   const calculateDividend = () => {
     const numArr = calculateInvestmentByYear(
       initialInvestment,
@@ -75,6 +125,27 @@ const Calculator = () => {
       additionalInvestmentFrequency
     );
     setGlobalArray(numArr);
+    setPrincipalArray(getPrincipalInvestmentValues());
+  };
+
+  const calculateMonthlyInvestmentForYear = () => {
+    const totalByYear: number[] = [];
+    let total = initialInvestment;
+    const additionalInvestmentNum = additionalInvestment;
+    const months = 12;
+    const dividendPayouts = mapDividendFrequencyToNumMonths(dividendFrequency);
+    const freq = mapDividendFrequencyToNumMonths(additionalInvestmentFrequency);
+    const investReturn = investmentReturn / 100;
+    for (let i = 1; i <= months; i++) {
+      if (i % dividendPayouts === 0 || (i === 1 && dividendPayouts === 4)) {
+        total = total * (1 + investReturn / dividendFrequency);
+        totalByYear.push(total);
+      }
+      if (i % freq === 0 || (i === 1 && dividendPayouts === 4)) {
+        total += additionalInvestmentNum;
+      }
+    }
+    return totalByYear;
   };
 
   const calculateInvestmentByYear = (
@@ -90,32 +161,25 @@ const Calculator = () => {
     const months = n * 12;
     const dividendPayouts = mapDividendFrequencyToNumMonths(dividendFrequency);
     const freq = mapDividendFrequencyToNumMonths(additionalInvestmentFrequency);
-    for (let i = 1; i <= months; i++) {
-      if (i % dividendPayouts === 0 || (i === 1 && dividendPayouts === 4)) {
-        p = p * (1 + investmentReturn / dividendFrequency);
+    if (years == 1) {
+      return calculateMonthlyInvestmentForYear();
+    } else {
+      for (let i = 1; i <= months; i++) {
+        if (i % dividendPayouts === 0 || (i === 1 && dividendPayouts === 4)) {
+          p = p * (1 + investmentReturn / dividendFrequency);
+        }
+        if (i % freq === 0 || (i === 1 && dividendPayouts === 4)) {
+          p += additionalInvestmentNum;
+        }
+        // add the yearly total to an array
+        if (i % 12 === 0) {
+          totalByYear.push(p);
+        }
       }
-      if (i % freq === 0 || (i === 1 && dividendPayouts === 4)) {
-        p += additionalInvestmentNum;
-      }
-      // add the yearly total to an array
-      if (i % 12 === 0) {
-        totalByYear.push(p);
-      }
+      console.log(totalByYear);
+      console.log("total: ", p);
+      return totalByYear;
     }
-    console.log(totalByYear);
-    console.log("total: ", p);
-    return totalByYear;
-  };
-
-  const mapDividendFrequencyToNumMonths = (dividendFrequency: number) => {
-    console.log("dividend frequency: ", dividendFrequency);
-    if (dividendFrequency == 12) {
-      return 1;
-    }
-    if (dividendFrequency == 4) {
-      return 4;
-    }
-    return 12;
   };
 
   return (
