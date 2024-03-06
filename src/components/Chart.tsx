@@ -41,7 +41,9 @@ const LineChart = () => {
   };
 
   useEffect(() => {
-    if (globalArray.length > 2) {
+    // if it is set to quarterly we will have more values
+    console.log("global array: ", globalArray);
+    if (globalArray.length > 1) {
       setlabels(computeYears(globalArray));
     } else {
       setlabels(getDefaultLabels());
@@ -90,6 +92,8 @@ const LineChart = () => {
           target: "origin",
           // above: "rgb(166, 0, 0, 0.1)", // Area will be red above the origin
         },
+        pointRadius: 6, // Set the radius of the dots
+        pointHoverRadius: 10, // Set the radius of the dots on hover
       },
       {
         label: "Principal",
@@ -100,6 +104,8 @@ const LineChart = () => {
           target: "Investment",
           // above: "rgb(1, 0, 0)", // Area will be red above the origin
         },
+        pointRadius: 6, // Set the radius of the dots
+        pointHoverRadius: 10, // Set the radius of the dots on hover
       },
     ],
   };
