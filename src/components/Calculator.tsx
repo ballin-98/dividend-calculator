@@ -17,7 +17,6 @@ import {
 } from "../constants/InputConstants";
 import { useContext, useEffect } from "react";
 import { GlobalArrayContext } from "../pages/CalculatorPage";
-// import { getDefaultLabels } from "./getDefaultLabels";
 
 const Calculator = () => {
   const calculateDividend = () => {

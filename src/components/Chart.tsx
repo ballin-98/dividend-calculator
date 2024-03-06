@@ -29,6 +29,9 @@ const LineChart = () => {
   );
 
   const [labels, setlabels] = useState(getDefaultLabels());
+  const [max, setMax] = useState(3000);
+  const [min, setMin] = useState(0);
+  const [step, setStep] = useState(500);
 
   const computeYears = (arr: number[]) => {
     const yearLabels = [];
@@ -40,14 +43,45 @@ const LineChart = () => {
     return yearLabels;
   };
 
+  const computeMax = (arr: number[]) => {
+    let max = arr[0];
+
+    for (let i = 1; i < arr.length; i++) {
+      if (arr[i] > max) {
+        max = arr[i];
+      }
+    }
+
+    return max;
+  };
+
+  const computeSteps = (max: number, min: number, step: number = 6) => {
+    return (max + min) / step;
+  };
+
+  const computeMin = (arr: number[]) => {
+    let min = arr[0];
+
+    for (let i = 1; i < arr.length; i++) {
+      if (arr[i] < min) {
+        min = arr[i];
+      }
+    }
+
+    return min;
+  };
+
   useEffect(() => {
-    // if it is set to quarterly we will have more values
-    console.log("global array: ", globalArray);
     if (globalArray.length > 1) {
       setlabels(computeYears(globalArray));
     } else {
       setlabels(getDefaultLabels());
     }
+    const computedMax = computeMax(globalArray);
+    setMax(computedMax);
+    const computedMin = computeMin(globalArray);
+    setMin(computedMin);
+    setStep(computeSteps(computedMax, computedMin));
   }, [globalArray]);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -73,9 +107,9 @@ const LineChart = () => {
       y: {
         beginAtZero: true,
         ticks: {
-          suggestedMin: 0, // set the minimum value
-          suggestedMax: 20, // set the maximum value
-          stepSize: 5, // set the interval between ticks
+          suggestedMin: min, // set the minimum value
+          suggestedMax: max, // set the maximum value
+          stepSize: step, // set the interval between ticks
         },
       },
     },
