@@ -15,33 +15,67 @@ import {
   RATE_OF_RETURN,
   DIVIDEND_PAYOUT_FREQUENCY,
 } from "../constants/InputConstants";
-import { useState } from "react";
+import { useContext, useEffect } from "react";
+import { GlobalArrayContext } from "../pages/CalculatorPage";
 
 const Calculator = () => {
-  const [initialInvestment, setInitialInvestment] = useState(1000);
-  const [additionalInvestment, setAdditionalInvestment] = useState(100);
-  const [additionalInvestmentFrequency, setAdditionalInvestmentFrequency] =
-    useState(1);
-  const [years, setYears] = useState(2);
-  const [investmentReturn, setInvestmentReturn] = useState(5);
-  const [dividendFrequency, setDividendFrequency] = useState(1);
+  const calculateDividend = () => {
+    const numArr = calculateInvestmentByYear(
+      initialInvestment,
+      years,
+      returnRate / 100,
+      dividendPayoutFrequency,
+      additionalInvestment,
+      additionalInvestmentFrequency
+    );
+    setGlobalArray(numArr);
+    setPrincipalArray(getPrincipalInvestmentValues());
+  };
+
+  const {
+    setGlobalArray,
+    setPrincipalArray,
+    initialInvestment,
+    setInitialInvestment,
+    additionalInvestment,
+    setAdditionalInvestment,
+    additionalInvestmentFrequency,
+    setAdditionalInvestmentFrequency,
+    years,
+    setYears,
+    returnRate,
+    setReturnRate,
+    dividendPayoutFrequency,
+    setDividendPayoutFrequency,
+  } = useContext(GlobalArrayContext)!;
+
+  useEffect(() => {
+    console.log("initial investment: ", initialInvestment);
+    calculateDividend();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    initialInvestment,
+    additionalInvestment,
+    additionalInvestmentFrequency,
+    years,
+    returnRate,
+    dividendPayoutFrequency,
+  ]);
 
   const handleInitialInvestment = (event: any) => {
     if (event.target) {
-      setInitialInvestment(event.target.value);
+      setInitialInvestment(parseInt(event.target.value, 10));
     }
   };
 
   const handleAdditionalInvestment = (event: any) => {
     if (event.target) {
-      setAdditionalInvestment(event.target.value);
+      setAdditionalInvestment(parseInt(event.target.value, 10));
     }
   };
 
   const handleAdditionalInvestmentFrequency = (event: any) => {
-    console.log("running");
     if (event.target) {
-      console.log("here");
       setAdditionalInvestmentFrequency(event.target.value);
     }
   };
@@ -54,31 +88,130 @@ const Calculator = () => {
 
   const handleReturn = (event: any) => {
     if (event.target) {
-      setInvestmentReturn(event.target.value);
+      setReturnRate(event.target.value);
     }
   };
 
   const handleDividendFrequency = (event: any) => {
-    console.log("running");
     if (event.target) {
-      console.log("here");
-      setDividendFrequency(event.target.value);
+      setDividendPayoutFrequency(event.target.value);
     }
   };
 
-  const calculateDividend = () => {
-    const investmentReturnDecimal = investmentReturn / 100;
-    const rDivN = investmentReturnDecimal / dividendFrequency;
-    const divNumYears = dividendFrequency * years;
-    const compoundInterest =
-      initialInvestment * Math.pow(1 + rDivN, divNumYears);
-    console.log(compoundInterest);
-    const additionalInterest =
-      additionalInvestment *
-      ((Math.pow(1 + rDivN, dividendFrequency * years) - 1) / rDivN);
-    console.log(additionalInterest);
-    const total = compoundInterest + additionalInterest;
-    console.log("total made: ", total);
+  const calculateMonthlyPrincipal = () => {
+    const totalMonth: number[] = [];
+    let total = initialInvestment;
+    const dividendPayouts = mapDividendFrequencyToNumMonths(
+      dividendPayoutFrequency
+    );
+    const freq = mapDividendFrequencyToNumMonths(additionalInvestmentFrequency);
+    for (let i = 1; i <= 12; i++) {
+      if (i % freq === 0 || (i === 1 && dividendPayouts === 4)) {
+        if (i != 1) {
+          total += additionalInvestment;
+        }
+        totalMonth.push(total);
+      }
+    }
+    return totalMonth;
+  };
+
+  const getPrincipalInvestmentValues = () => {
+    let totalByYear: number[] = [];
+    let total = initialInvestment;
+    const months = years * 12;
+    const dividendPayouts = mapDividendFrequencyToNumMonths(
+      dividendPayoutFrequency
+    );
+    const freq = mapDividendFrequencyToNumMonths(additionalInvestmentFrequency);
+    if (years == 1) {
+      totalByYear = calculateMonthlyPrincipal();
+    } else {
+      for (let i = 1; i <= months; i++) {
+        if (i % freq === 0 || (i === 1 && dividendPayouts === 4)) {
+          total += additionalInvestment;
+        }
+        // add the yearly total to an array
+        if (i % 12 === 0) {
+          totalByYear.push(total);
+        }
+      }
+    }
+
+    return totalByYear;
+  };
+
+  const mapDividendFrequencyToNumMonths = (dividendFrequency: number) => {
+    // console.log("dividend frequency: ", dividendFrequency);
+    if (dividendFrequency == 12) {
+      return 1;
+    }
+    if (dividendFrequency == 4) {
+      return 4;
+    }
+    return 12;
+  };
+
+  const calculateMonthlyInvestmentForYear = () => {
+    const totalByYear: number[] = [];
+    let total = initialInvestment;
+    const additionalInvestmentNum = additionalInvestment;
+    const months = 12;
+    const dividendPayouts = mapDividendFrequencyToNumMonths(
+      dividendPayoutFrequency
+    );
+    const freq = mapDividendFrequencyToNumMonths(additionalInvestmentFrequency);
+    const investReturn = returnRate / 100;
+
+    for (let i = 1; i <= months; i++) {
+      if (i % dividendPayouts === 0 || (i === 1 && dividendPayouts === 4)) {
+        total = total * (1 + investReturn / dividendPayoutFrequency);
+        totalByYear.push(total);
+      }
+      if (i % freq === 0 || (i === 1 && dividendPayouts === 4)) {
+        total += additionalInvestmentNum;
+        // only include additional investment if it wasn't included
+        if (i % dividendPayouts != 0) {
+          totalByYear.push(total);
+        }
+      }
+    }
+    console.log(totalByYear);
+    return totalByYear;
+  };
+
+  const calculateInvestmentByYear = (
+    p: number,
+    n: number,
+    investmentReturn: number,
+    dividendFrequency: number,
+    additionalInvestment: any,
+    additionalInvestmentFrequency: number
+  ) => {
+    const totalByYear: number[] = [];
+    const additionalInvestmentNum = parseInt(additionalInvestment, 10);
+    const months = n * 12;
+    const dividendPayouts = mapDividendFrequencyToNumMonths(dividendFrequency);
+    const freq = mapDividendFrequencyToNumMonths(additionalInvestmentFrequency);
+    if (years == 1) {
+      return calculateMonthlyInvestmentForYear();
+    } else {
+      for (let i = 1; i <= months; i++) {
+        if (i % dividendPayouts === 0 || (i === 1 && dividendPayouts === 4)) {
+          p = p * (1 + investmentReturn / dividendFrequency);
+        }
+        if (i % freq === 0 || (i === 1 && dividendPayouts === 4)) {
+          p += additionalInvestmentNum;
+        }
+        // add the yearly total to an array
+        if (i % 12 === 0) {
+          totalByYear.push(p);
+        }
+      }
+      console.log(totalByYear);
+      console.log("total: ", p);
+      return totalByYear;
+    }
   };
 
   return (
@@ -158,7 +291,7 @@ const Calculator = () => {
           InputLabelProps={{
             style: { paddingLeft: "12px" }, // Adjust the left padding as needed
           }}
-          value={investmentReturn}
+          value={returnRate}
           onChange={handleReturn}
         />
       </div>
@@ -170,7 +303,7 @@ const Calculator = () => {
         <Select
           labelId="demo-simple-select-label"
           id="demo-simple-select"
-          value={dividendFrequency}
+          value={dividendPayoutFrequency}
           label={DIVIDEND_PAYOUT_FREQUENCY}
           onChange={handleDividendFrequency}
         >
@@ -183,6 +316,7 @@ const Calculator = () => {
         variant="contained"
         style={{ backgroundColor: "#ADBC9F", height: "100px" }}
         onClick={calculateDividend}
+        className="calculate-button"
       >
         Calculate
       </Button>
