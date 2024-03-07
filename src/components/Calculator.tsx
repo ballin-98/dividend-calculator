@@ -5,7 +5,6 @@ import {
   Select,
   MenuItem,
   TextField,
-  Button,
 } from "@mui/material";
 import {
   INITIAL_INVESTMENT,
@@ -312,14 +311,6 @@ const Calculator = () => {
           <MenuItem value={12}>Monthly</MenuItem>
         </Select>
       </FormControl>
-      <Button
-        variant="contained"
-        style={{ backgroundColor: "#ADBC9F", height: "100px" }}
-        onClick={calculateDividend}
-        className="calculate-button"
-      >
-        Calculate
-      </Button>
     </div>
   );
 };
