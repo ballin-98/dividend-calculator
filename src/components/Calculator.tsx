@@ -100,18 +100,20 @@ const Calculator = () => {
   const calculateMonthlyPrincipal = () => {
     const totalMonth: number[] = [];
     let total = initialInvestment;
-    const dividendPayouts = mapDividendFrequencyToNumMonths(
-      dividendPayoutFrequency
+    const additionalInvestmentFreq = mapDividendFrequencyToNumMonths(
+      additionalInvestmentFrequency
     );
-    const freq = mapDividendFrequencyToNumMonths(additionalInvestmentFrequency);
     for (let i = 1; i <= 12; i++) {
-      if (i % freq === 0 || (i === 1 && dividendPayouts === 4)) {
+      if (i % additionalInvestmentFreq === 0) {
         if (i != 1) {
+          console.log("value of i: ", i, "  ", additionalInvestment);
           total += additionalInvestment;
+          console.log(total);
         }
-        totalMonth.push(total);
       }
+      totalMonth.push(total);
     }
+    console.log(totalMonth);
     return totalMonth;
   };
 
@@ -141,7 +143,6 @@ const Calculator = () => {
   };
 
   const mapDividendFrequencyToNumMonths = (dividendFrequency: number) => {
-    // console.log("dividend frequency: ", dividendFrequency);
     if (dividendFrequency == 12) {
       return 1;
     }
@@ -165,17 +166,12 @@ const Calculator = () => {
     for (let i = 1; i <= months; i++) {
       if (i % dividendPayouts === 0 || (i === 1 && dividendPayouts === 4)) {
         total = total * (1 + investReturn / dividendPayoutFrequency);
-        totalByYear.push(total);
       }
       if (i % freq === 0 || (i === 1 && dividendPayouts === 4)) {
         total += additionalInvestmentNum;
-        // only include additional investment if it wasn't included
-        if (i % dividendPayouts != 0) {
-          totalByYear.push(total);
-        }
       }
+      totalByYear.push(total);
     }
-    console.log(totalByYear);
     return totalByYear;
   };
 

@@ -12,10 +12,16 @@ import {
 import { Line } from "react-chartjs-2";
 import { useContext, useEffect, useState } from "react";
 import { GlobalArrayContext } from "../pages/CalculatorPage";
-import { getDefaultLabels } from "./getDefaultLabels";
+import { getMonths, getQuarters, getYears } from "../composables/LabelHelper";
 
 const LineChart = () => {
-  const { globalArray, principalArray } = useContext(GlobalArrayContext)!;
+  const {
+    globalArray,
+    principalArray,
+    years,
+    additionalInvestmentFrequency,
+    dividendPayoutFrequency,
+  } = useContext(GlobalArrayContext)!;
 
   ChartJS.register(
     CategoryScale,
@@ -28,20 +34,10 @@ const LineChart = () => {
     Filler
   );
 
-  const [labels, setlabels] = useState(getDefaultLabels());
+  const [labels, setlabels] = useState(getMonths());
   const [max, setMax] = useState(3000);
   const [min, setMin] = useState(0);
   const [step, setStep] = useState(500);
-
-  const computeYears = (arr: number[]) => {
-    const yearLabels = [];
-    let currentYear = 2024;
-    for (let i = 0; i < arr.length; i++) {
-      yearLabels.push(String(currentYear));
-      currentYear += 1;
-    }
-    return yearLabels;
-  };
 
   const computeMax = (arr: number[]) => {
     let max = arr[0];
@@ -71,12 +67,36 @@ const LineChart = () => {
     return Math.round(min);
   };
 
+  // calculate the labels to use on the chart
   useEffect(() => {
-    if (globalArray.length > 1) {
-      setlabels(computeYears(globalArray));
+    if (years.toString() === "1") {
+      if (
+        dividendPayoutFrequency === 12 ||
+        additionalInvestmentFrequency === 12
+      ) {
+        setlabels(getMonths());
+      } else if (
+        dividendPayoutFrequency === 4 ||
+        additionalInvestmentFrequency === 4
+      ) {
+        setlabels(getMonths());
+      } else {
+        setlabels(getMonths());
+      }
     } else {
-      setlabels(getDefaultLabels());
+      const currentDate = new Date();
+      const currentYear = currentDate.getFullYear();
+      setlabels(getYears(currentYear, years));
     }
+  }, [
+    additionalInvestmentFrequency,
+    dividendPayoutFrequency,
+    globalArray,
+    years,
+  ]);
+
+  // calculate min, max and step
+  useEffect(() => {
     const computedMax = computeMax(globalArray);
     setMax(computedMax);
     const computedMin = computeMin(globalArray);
