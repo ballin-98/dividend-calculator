@@ -12,7 +12,7 @@ import {
 import { Line } from "react-chartjs-2";
 import { useContext, useEffect, useState } from "react";
 import { GlobalArrayContext } from "../pages/CalculatorPage";
-import { getMonths, getQuarters, getYears } from "../composables/LabelHelper";
+import { getMonths, getYears } from "../composables/LabelHelper";
 
 const LineChart = () => {
   const {
