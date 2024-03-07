@@ -52,11 +52,11 @@ const LineChart = () => {
       }
     }
 
-    return max;
+    return Math.round(max);
   };
 
   const computeSteps = (max: number, min: number, step: number = 6) => {
-    return (max + min) / step;
+    return Math.round((max + min) / step);
   };
 
   const computeMin = (arr: number[]) => {
@@ -68,7 +68,7 @@ const LineChart = () => {
       }
     }
 
-    return min;
+    return Math.round(min);
   };
 
   useEffect(() => {
@@ -87,7 +87,6 @@ const LineChart = () => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const options: any = {
     responsive: true,
-    // fill: origin,
     tension: 0.1,
     backgroundColor: "rgba(226, 178, 178)",
     plugins: {
@@ -124,7 +123,6 @@ const LineChart = () => {
         backgroundColor: "rgba(255, 99, 132, 0.25)",
         fill: {
           target: "origin",
-          // above: "rgb(166, 0, 0, 0.1)", // Area will be red above the origin
         },
         pointRadius: 6, // Set the radius of the dots
         pointHoverRadius: 10, // Set the radius of the dots on hover
@@ -136,7 +134,6 @@ const LineChart = () => {
         backgroundColor: "rgba(0, 0, 0, 0.7)",
         fill: {
           target: "Investment",
-          // above: "rgb(1, 0, 0)", // Area will be red above the origin
         },
         pointRadius: 6, // Set the radius of the dots
         pointHoverRadius: 10, // Set the radius of the dots on hover
