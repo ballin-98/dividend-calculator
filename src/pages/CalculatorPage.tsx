@@ -2,6 +2,7 @@
 import Calculator from "../components/Calculator";
 import LineChart from "../components/Chart";
 import { ReactNode, createContext, useState } from "react";
+import SummaryCard from "../components/SummaryCard";
 
 export interface GlobalArrayContextType {
   globalArray: number[];
@@ -78,6 +79,7 @@ const CalculatorPage = () => {
       <div className="calculator-page-container">
         <Calculator />
         <div className="right-side">
+          <SummaryCard />
           <div className="chart-container">
             <LineChart />
           </div>
