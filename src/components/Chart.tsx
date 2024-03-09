@@ -38,6 +38,7 @@ const LineChart = () => {
   const [max, setMax] = useState(3000);
   const [min, setMin] = useState(0);
   const [step, setStep] = useState(500);
+  const [timeLabel, setTimeLabel] = useState("Years");
 
   const computeMax = (arr: number[]) => {
     let max = arr[0];
@@ -66,6 +67,14 @@ const LineChart = () => {
 
     return Math.round(min);
   };
+
+  useEffect(() => {
+    if (years.toString() === "1") {
+      setTimeLabel("Months");
+    } else {
+      setTimeLabel("Years");
+    }
+  }, [years]);
 
   // calculate the labels to use on the chart
   useEffect(() => {
@@ -120,7 +129,7 @@ const LineChart = () => {
         labels: labels,
         title: {
           display: true,
-          text: "MONTHS",
+          text: timeLabel,
         },
       },
       y: {
