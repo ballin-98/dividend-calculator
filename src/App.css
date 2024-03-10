@@ -1,3 +1,9 @@
+:root {
+  --page-background-color: #eadfdb;
+  --background-color: #d8c2b5;
+  --text-color: #455050;
+}
+
 body {
   margin: 0px;
 }
@@ -7,7 +13,8 @@ body {
   flex-direction: row;
   height: 100vh;
   width: 100%;
-  background: rgb(197, 197, 197);
+  background: var(--page-background-color);
+  color: var(--text-color);
 }
 
 .right-side {
@@ -17,20 +24,20 @@ body {
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  gap: 10px;
+  gap: 20px;
   align-items: center;
   margin: 10px 0;
 }
 
 .summary-card-container {
-  background: rgb(226, 178, 178);
+  background: var(--background-color);
   height: 20%;
-  width: calc(100% - 20px);
+  width: calc(100% - 40px);
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
   align-items: center;
-  box-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.6);
   gap: 10px;
 }
 
@@ -43,22 +50,22 @@ body {
 .chart-container {
   display: flex;
   height: 100%;
-  width: calc(100% - 20px);
+  width: calc(100% - 40px);
   justify-content: center;
   align-items: center;
-  background: rgb(226, 178, 178);
-  box-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+  background: var(--background-color);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.6);
 }
 
 .calculator-container {
-  width: 40%;
-  background: rgb(226, 178, 178);
-  box-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+  width: calc(40%);
+  background: var(--background-color);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.6);
   font-family: Verdana, Geneva, Tahoma, sans-serif;
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
-  margin: 10px 10px 10px 10px;
+  margin: 10px 10px 10px 20px;
 }
 
 .calculator-title {
@@ -85,7 +92,6 @@ body {
   }
 
   .calculator-container {
-    background: rgb(226, 178, 178);
     width: calc(100% - 20px);
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     display: flex;
@@ -97,9 +103,9 @@ body {
     display: flex;
     height: 100%;
     width: 100%;
-    background: rgb(197, 197, 197);
     align-items: center;
     justify-content: center;
+    gap: 10px;
   }
 
   .calculator-title {
@@ -117,6 +123,7 @@ body {
   .summary-card-container {
     gap: 10px;
     height: 100%;
+    width: calc(100% - 20px);
   }
   .summary-total {
     font-size: 18px;

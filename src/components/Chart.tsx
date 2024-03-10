@@ -117,7 +117,7 @@ const LineChart = () => {
   const options: any = {
     responsive: true,
     tension: 0.1,
-    backgroundColor: "rgba(226, 178, 178)",
+    backgroundColor: "#AEAFB1",
     plugins: {
       legend: {
         position: "top" as const,
@@ -148,24 +148,20 @@ const LineChart = () => {
       {
         label: "Investment",
         data: globalArray,
-        borderColor: "rgb(255, 99, 132)",
-        backgroundColor: "rgba(255, 99, 132, 0.25)",
+        borderColor: "#13678A",
+        backgroundColor: "rgba(174, 175, 177, 0.5)",
         fill: {
           target: "origin",
         },
         pointRadius: 6, // Set the radius of the dots
-        pointHoverRadius: 10, // Set the radius of the dots on hover
+        pointHoverRadius: 12, // Set the radius of the dots on hover
       },
       {
         label: "Principal",
         data: principalArray,
-        borderColor: "rgb(1, 1, 132)",
-        backgroundColor: "rgba(0, 0, 0, 0.7)",
-        fill: {
-          target: "Investment",
-        },
+        borderColor: "#9e2a2b",
         pointRadius: 6, // Set the radius of the dots
-        pointHoverRadius: 10, // Set the radius of the dots on hover
+        pointHoverRadius: 12, // Set the radius of the dots on hover
       },
     ],
   };
