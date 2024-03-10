@@ -6,6 +6,7 @@
 
 body {
   margin: 0px;
+  font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
 }
 
 .calculator-page-container {
@@ -61,7 +62,6 @@ body {
   width: calc(40%);
   background: var(--background-color);
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.6);
-  font-family: Verdana, Geneva, Tahoma, sans-serif;
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
