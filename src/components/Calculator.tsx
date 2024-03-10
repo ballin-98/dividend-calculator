@@ -121,15 +121,12 @@ const Calculator = () => {
     let totalByYear: number[] = [];
     let total = initialInvestment;
     const months = years * 12;
-    const dividendPayouts = mapDividendFrequencyToNumMonths(
-      dividendPayoutFrequency
-    );
     const freq = mapDividendFrequencyToNumMonths(additionalInvestmentFrequency);
     if (years == 1) {
       totalByYear = calculateMonthlyPrincipal();
     } else {
       for (let i = 1; i <= months; i++) {
-        if (i % freq === 0 || (i === 1 && dividendPayouts === 4)) {
+        if (i % freq === 0) {
           total += additionalInvestment;
         }
         // add the yearly total to an array
@@ -147,7 +144,7 @@ const Calculator = () => {
       return 1;
     }
     if (dividendFrequency == 4) {
-      return 4;
+      return 3;
     }
     return 12;
   };
@@ -164,14 +161,22 @@ const Calculator = () => {
     const investReturn = returnRate / 100;
 
     for (let i = 1; i <= months; i++) {
-      if (i % dividendPayouts === 0 || (i === 1 && dividendPayouts === 4)) {
+      console.log(
+        "the value of i: ",
+        i,
+        " the value of additional freq: ",
+        freq
+      );
+      if (i % dividendPayouts === 0) {
         total = total * (1 + investReturn / dividendPayoutFrequency);
       }
-      if (i % freq === 0 || (i === 1 && dividendPayouts === 4)) {
+      if (i % freq === 0) {
         total += additionalInvestmentNum;
+        console.log("adding additional investment: ", additionalInvestment);
       }
       totalByYear.push(total);
     }
+    console.log(totalByYear);
     return totalByYear;
   };
 
@@ -192,10 +197,10 @@ const Calculator = () => {
       return calculateMonthlyInvestmentForYear();
     } else {
       for (let i = 1; i <= months; i++) {
-        if (i % dividendPayouts === 0 || (i === 1 && dividendPayouts === 4)) {
+        if (i % dividendPayouts === 0) {
           p = p * (1 + investmentReturn / dividendFrequency);
         }
-        if (i % freq === 0 || (i === 1 && dividendPayouts === 4)) {
+        if (i % freq === 0) {
           p += additionalInvestmentNum;
         }
         // add the yearly total to an array
